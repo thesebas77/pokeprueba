@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, Alert, ActivityIndicator } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext } from '../contexts/AuthContext'
 
@@ -9,33 +9,35 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithP
 const LoginScreen = () => {
     const {setUser, setLogged} = React.useContext(AuthContext);
 
-    const provider = new GoogleAuthProvider();
-    provider.addScope('profile');
-    provider.addScope('email');
-
-    provider.setCustomParameters({
-        prompt: "select_account"
-    });
-
     const [resource, setResource] = React.useState({
         email: '',
         pass: ''
     }) 
     const [registerMode, setRegisterMode] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
 
     const handleChange = (key,text) => {
-        setResource({...resource, [key]: text })
+        setResource({...resource, [key]: text.toLowerCase() })
     }
 
     const handleClickGoogle = async () => {
+        setLoading(true)
+        const provider = new GoogleAuthProvider();
+        provider.addScope('profile');
+        provider.addScope('email');
 
-        signInWithPopup(auth, provider)
+        provider.setCustomParameters({
+            prompt: "select_account"
+        });
+
+        await signInWithPopup(auth, provider)
             .then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 // The signed-in user info.
                 const user = result.user;
+                setLoading(false)
                 console.log(result)
                 // ...
             }).catch((error) => {
@@ -46,12 +48,14 @@ const LoginScreen = () => {
                 const email = error.customData.email;
                 // The AuthCredential type that was used.
                 const credential = GoogleAuthProvider.credentialFromError(error);
+                setLoading(false)
                 console.log(errorCode, ' => ',errorMessage )
                 // ...
             });
     }
 
     const handleClickLogin = async () => {
+        setLoading(true)
         signInWithEmailAndPassword(auth, resource.email, resource.pass)
             .then( async (userCredential) => {
                 // Signed in 
@@ -60,32 +64,51 @@ const LoginScreen = () => {
                 setLogged(true)
                 await AsyncStorage.setItem('poke-user', JSON.stringify(user))
                 await AsyncStorage.setItem('poke-logged', JSON.stringify(true))
+                setLoading(false)
                 // ...
             })
             .catch(async (error) => {
-                const errorCode = error.code;
                 const errorMessage = error.message;
                 setLogged(false)
                 setUser(null)
                 await AsyncStorage.removeItem('poke-user')
                 await AsyncStorage.removeItem('poke-logged')
+                setLoading(false)
                 console.log('errorMessage',errorMessage)
             });
     }
 
     const handleClickRegister = async () => {
-        createUserWithEmailAndPassword(auth, resource.email, resource.pass)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-            });
+        setLoading(true)
+        if(resource.pass.length >= 6){
+            createUserWithEmailAndPassword(auth, resource.email, resource.pass)
+                .then( async (userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    setUser(user)
+                    setLogged(true)
+                    await AsyncStorage.setItem('poke-user', JSON.stringify(user))
+                    await AsyncStorage.setItem('poke-logged', JSON.stringify(true))
+                    setLoading(false)
+                    // ...
+                })
+                .catch(async (error) => {
+                    const errorMessage = error.message;
+                    setLogged(false)
+                    setUser(null)
+                    await AsyncStorage.removeItem('poke-user')
+                    await AsyncStorage.removeItem('poke-logged')
+                    setLoading(false)
+                    console.log('errorMessage',errorMessage)
+                    // ..
+                });
+        }else{
+            setLoading(false)
+            Alert.alert('La contraseña tiene que tener minimo 6 caracteres.')
+        }
     }
+
+    if(loading) return <ActivityIndicator style={{height: 120}} size={20} color="teal" />
 
     return (
         <View style={styles.login}>
@@ -95,6 +118,7 @@ const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder='email'
+                    value={resource.email}
                     keyboardType="email-address"
                     onChangeText={(text) => {handleChange('email',text)}}
                 />
@@ -116,16 +140,16 @@ const LoginScreen = () => {
 
                     <Text>Ingresa con </Text>
                     <TouchableOpacity
-                        style={[styles.button, {borderColor: 'red'}]}
-                        onPress={handleClickGoogle}
+                        style={[styles.disabledButton, {borderColor: 'white'}]}
+                        onPress={() => console.log('in revision.')}
                     >
-                        <Text style={[styles.textButton, {color: 'red'}]}>Google</Text>
+                        <Text style={[styles.textButton, {color: 'white'}]}>Google</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.button, {borderColor: 'blue'}]}
-                        onPress={handleClickGoogle}
+                        style={[styles.disabledButton, {borderColor: 'white'}]}
+                        onPress={() => console.log('in revision.')}
                     >
-                        <Text style={[styles.textButton, {color: 'blue'}]}>Facebook</Text>
+                        <Text style={[styles.textButton, {color: 'white'}]}>Facebook</Text>
                     </TouchableOpacity>
 
                     <Text>o</Text>
@@ -182,6 +206,16 @@ const styles = StyleSheet.create({
         height: 40,
         marginVertical: 10,
         borderColor: 'green',
+        borderWidth: 1,
+        borderRadius: 5,
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    disabledButton: {
+        width: '50%',
+        height: 40,
+        marginVertical: 10,
+        backgroundColor: 'lightgrey',
         borderWidth: 1,
         borderRadius: 5,
         display: 'flex',

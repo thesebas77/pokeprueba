@@ -100,6 +100,7 @@ export default function TeamCreateScreen(props){
         setLoading(true)
         set(ref(database, `teams/${user.uid}/${props.route.params.id}`), {
             id: props.route.params.id,
+            token: Math.random().toString(36).substr(6)+props.route.params.id,
             pokemons: selectPokemon,
             region: props.route.params.name,
             regionUrl: props.route.params.url

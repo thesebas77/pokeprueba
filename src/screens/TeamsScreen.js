@@ -14,6 +14,7 @@ export default function TeamsScreen(){
     const [idCurrent, setIdCurrent] = React.useState()
     const [loading, setLoading] = React.useState(false)
     const [token, setToken] = React.useState()
+    const [confirm, setConfirm] = React.useState(false)
 
     const navigation = useNavigation()
 
@@ -45,7 +46,7 @@ export default function TeamsScreen(){
     }
 
     const handleChangeToken = (text) => {
-        setToken(text)
+        setToken(text.toLowerCase())
     }
 
     const handleSearchToken = () => {
@@ -80,6 +81,7 @@ export default function TeamsScreen(){
                 if(idCurrent && idCurrent.length > 0){
                     set(ref(database, `teams/${user.uid}/${idCurrent.length}`), {
                         id: idCurrent.length,
+                        token: Math.random().toString(36).substr(6)+idCurrent.length,
                         region: arrayConfirm.region,
                         regionUrl: arrayConfirm.regionUrl,
                         pokemons: arrayConfirm.pokemons,
@@ -95,6 +97,7 @@ export default function TeamsScreen(){
                 }else{
                     set(ref(database, `teams/${user.uid}/1`), {
                         id: 1,
+                        token: Math.random().toString(36).substr(6)+1,
                         region: arrayConfirm.region,
                         regionUrl: arrayConfirm.regionUrl,
                         pokemons: arrayConfirm.pokemons,
@@ -189,6 +192,7 @@ export default function TeamsScreen(){
                                 > 
                                     <Text style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Editar</Text>
                                 </TouchableOpacity>
+                                <Text style={{fontSize: 16, fontWeight: 'bold'}}>{team.token}</Text>
                             </View>
                         </View>
                     )) 
