@@ -136,17 +136,17 @@ const LoginScreen = () => {
                 </TouchableOpacity>
 
                 {!registerMode ? <React.Fragment>
-                    <View style={[styles.separator, {backgroundColor: 'blue'}]} />
+                    <View style={[styles.separator, {backgroundColor: 'purple'}]} />
 
                     <Text>Ingresa con </Text>
                     <TouchableOpacity
-                        style={[styles.disabledButton, {borderColor: 'white'}]}
+                        style={styles.disabledButton}
                         onPress={() => console.log('in revision.')}
                     >
                         <Text style={[styles.textButton, {color: 'white'}]}>Google</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.disabledButton, {borderColor: 'white'}]}
+                        style={styles.disabledButton}
                         onPress={() => console.log('in revision.')}
                     >
                         <Text style={[styles.textButton, {color: 'white'}]}>Facebook</Text>
@@ -155,10 +155,10 @@ const LoginScreen = () => {
                     <Text>o</Text>
                 </React.Fragment> : null}
                 <TouchableOpacity
-                    style={[styles.button, {borderColor: 'indigo'}]}
+                    style={[styles.button, {backgroundColor: 'orange'}]}
                     onPress={() => {setRegisterMode(!registerMode)}}
                 >
-                    <Text style={[styles.textButton, {color: 'indigo'}]}>{registerMode ? 'Atras' : 'Registrate'}</Text>
+                    <Text style={styles.textButton}>{registerMode ? 'Atras' : 'Registrate'}</Text>
                 </TouchableOpacity>
 
             </SafeAreaView>
@@ -171,15 +171,27 @@ const styles = StyleSheet.create({
     login:{
         display: 'flex',
         justifyContent: 'center',
-        height: "100%",
+        height: "100%"
     },
     container: {
         display: 'flex',
         alignItems: 'center',
-        height: '100%',
         marginLeft: 10,
         marginRight: 10,
         borderRadius: 5,
+        borderWidth: 2,
+        borderColor: 'black',
+        backgroundColor: '#E3E3E3',
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 4,
+            height: 10,
+        },
+        shadowOpacity: 0.35,
+        shadowRadius: 5.84,
+
+        elevation: 10,
     },
     title: {
         fontSize: 32,
@@ -189,40 +201,42 @@ const styles = StyleSheet.create({
     separator: {
         marginVertical: 20,
         height: 1,
-        backgroundColor: 'green',
+        backgroundColor: 'purple',
         width: '80%',
     },
     input: {
         marginVertical: 5,
-        textAlign: 'center',
         width: '80%',
         height: 40,
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: 'green',
+        fontWeight: 'bold',
+        borderColor: 'purple',
     },
     button: {
-        width: '50%',
+        width: '80%',
         height: 40,
         marginVertical: 10,
-        borderColor: 'green',
+        backgroundColor: 'purple',
         borderWidth: 1,
         borderRadius: 5,
         display: 'flex',
+        borderColor: 'black',
         justifyContent: 'center',
     },
     disabledButton: {
-        width: '50%',
+        width: '80%',
         height: 40,
         marginVertical: 10,
         backgroundColor: 'lightgrey',
         borderWidth: 1,
         borderRadius: 5,
         display: 'flex',
+        borderColor: 'black',
         justifyContent: 'center',
     },
     textButton: {
-        color: 'green',
+        color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center'
