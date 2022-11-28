@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>495467819498-2q55cvf13h8gc8vcqcr8avlil3fmlr71.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.495467819498-2q55cvf13h8gc8vcqcr8avlil3fmlr71</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBkY_2u6A5THtySeRLyZFXw1idCh-PN1mM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>495467819498</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pokeprueba</string>
+	<key>PROJECT_ID</key>
+	<string>poke-prueba-a9627</string>
+	<key>STORAGE_BUCKET</key>
+	<string>poke-prueba-a9627.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:495467819498:ios:0f676cc96452de877e8293</string>
+	<key>DATABASE_URL</key>
+	<string>https://poke-prueba-a9627-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
