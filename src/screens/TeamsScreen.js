@@ -111,18 +111,19 @@ export default function TeamsScreen(){
             }else{
                 Alert.alert('No hubo resultados')
             }
-        // if(!confirm){
-        //     Alert.alert('No hubo resultados.')
-        // }
     }
 
-    const handleClickInfo = async () => {
+    const handleClickInfo = async (name) => {
         setLoading(true)
-        const response = await fetch(`${envs.pokeApi}region`)
+        const response = await fetch(`${envs.pokeApi}pokemon/${name}`)
         if(response.status === 200){
             const responseJSON = await response.json()
-            setRegions(responseJSON.results)
+            let temp = []
+            responseJSON.types.map((t) => temp.push(t.type.name) )
+            Alert.alert(`Tipo ${JSON.stringify(temp)}`)
+            setLoading(false)
         }else{
+            setLoading(false)
             console.log('error =>',response)
         }
         
@@ -173,7 +174,7 @@ export default function TeamsScreen(){
                                 {team.pokemons.map((t,i) => (
                                     <View key={i} >
                                         <TouchableOpacity
-                                            onPress={handleClickInfo}
+                                            onPress={() => handleClickInfo(t.name)}
                                         >
                                             <Image style={styles.image} source={{uri: t.image}} />
                                         </TouchableOpacity>
@@ -187,12 +188,6 @@ export default function TeamsScreen(){
                                     style={{backgroundColor: COLORS_REGION[team.region], padding: 5, borderRadius: 5}}
                                 > 
                                     <Text style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Editar</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity 
-                                    onPress={() =>  navigation.navigate('TeamCreate',{name: team.region, url: team.regionUrl, editMode: true, id: team.id ,pokemons: team.pokemons})}
-                                    style={{backgroundColor: '#5DD3FF', padding: 5, borderRadius: 5}}
-                                > 
-                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Mas Detalles</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
